@@ -21,16 +21,21 @@ app.use(bodyParser.json())
 app.use(cors({
   // 跨域請求的判斷
   origin (origin, callback) {
-    if (process.env.ALLOW_CORS === 'true') {
-      // 開發環境 ， 允許進入！
-      callback(null, true)
-    } else if (origin.includes('github')) {
-      // 非開發環境，但是是從github過來的，允許進入！
-      callback(null, true)
+    if (origin=== undefined){
+      callback(null,true)
     } else {
-      // 不是開發環境也不是從github過來的，拒絕進入！
-      callback(new Error('Not allowed'), false)
+      if (process.env.ALLOW_CORS === 'true') {
+        // 開發環境 ， 允許進入！
+        callback(null, true)
+      } else if (origin.includes('github')) {
+        // 非開發環境，但是是從github過來的，允許進入！
+        callback(null, true)
+      } else {
+        // 不是開發環境也不是從github過來的，拒絕進入！
+        callback(new Error('Not allowed'), false)
+      }
     }
+
   },
   credentials: true
 }))
